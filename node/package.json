@@ -1,0 +1,31 @@
+{
+	"name": "ofpword",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "pm2 start ecosystem.config.js",
+		"stop": "pm2 delete ecosystem.config.js",
+		"killofLed": "killall ofLed",
+		"displayApp": "cd .. && make run",
+		"clientSocket": "node clientSocket > ../bin/data/display.log",
+		"serverSocket": " websocketd --port=8080 tail -F ../bin/data/display.log",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/davydka/pword.git"
+	},
+	"author": "davidwhitely",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/davydka/pword/issues"
+	},
+	"homepage": "https://github.com/davydka/pword#readme",
+	"dependencies": {
+		"dotenv": "^6.0.0",
+		"pm2": "^3.0.3",
+		"reconnecting-websocket": "^4.0.0-rc5",
+		"ws": "^6.0.0"
+	}
+}
