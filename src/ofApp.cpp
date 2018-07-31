@@ -50,10 +50,16 @@ void ofApp::draw(){
 		string line = *end;
 
 		ofRectangle r = font.getBoundingBox(line, 0, 0);
-		float xPos = ofMap(sin(ofGetElapsedTimef()/4), -1, 1, 0, -r.getWidth()+16);
+		// float xPos = ofMap(sin(ofGetElapsedTimef()/4), -1, 1, 0, -r.getWidth()+16);
+		float m = ofToFloat(ofGetTimestampString("%M"));
+		float s = ofToFloat(ofGetTimestampString("%S")) * 1000;
+		float i = ofToFloat(ofGetTimestampString("%i"));
+		float time = s + i;
+		float max = 10000;
+		float xPos = ofMap(ofWrap(time, 0, max), 0, max, 0, -r.getWidth()+16);
 
 		ofDrawBitmapString(line, xPos, 16);
-		// cout << line << endl;
+		// cout << s + i << endl;
 		ofColor(255);
 	}
 
