@@ -2,15 +2,18 @@
 int offset = 0;
 int rot = 0;
 int flip = 0;
+int length = 1;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	 offset = ofToInt(ofGetEnv("OFLED_OFFSET"));
 	 rot = ofToInt(ofGetEnv("OFLED_ROT"));
 	 flip = ofToInt(ofGetEnv("OFLED_FLIP"));
+	 length = ofToInt(ofGetEnv("OFLED_LENGTH"));
 	 cout << offset << endl;;
 	 cout << rot << endl;;
 	 cout << flip << endl;;
+	 cout << length << endl;;
 
 	 // cout << ofGetEnv("OFLED_OFFSET") << endl;;
 	ofDisableAntiAliasing();
@@ -63,7 +66,7 @@ void ofApp::draw(){
 		float i = ofToFloat(ofGetTimestampString("%i"));
 		float time = s + i;
 		float max = 10000;
-		float xPos = ofMap(ofWrap(time, 0, max), 0, max, 0, -r-16);
+		float xPos = ofMap(ofWrap(time, 0, max), 0, max, 0, -r-(16*length));
 
 		ofPushMatrix();
 		ofTranslate(8, 8);
