@@ -1,7 +1,9 @@
 bin/*
 !bin/data/
+!bin/displayClient/
 
 obj/*
 .idea/*
 .DS_Store
 
+node_modules
