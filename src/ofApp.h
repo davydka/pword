@@ -33,9 +33,14 @@ class ofApp : public ofBaseApp{
 		// FBO stuff
 		//-----------------------------
 		ofFbo fbo;
+		ofFbo fboHolder;
 
 		// Graphic functions
 		//-----------------------------
 		int rectWidth;
+
+		// Font
+		// ----------------------------
+		ofTrueTypeFont tFont;
 
 };

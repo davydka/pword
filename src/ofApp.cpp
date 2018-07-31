@@ -1,9 +1,18 @@
 #include "ofApp.h"
-ofBitmapFont font;
-// ofRectangle r;
+int offset = 0;
+int rot = 0;
+int flip = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	 offset = ofToInt(ofGetEnv("OFLED_OFFSET"));
+	 rot = ofToInt(ofGetEnv("OFLED_ROT"));
+	 flip = ofToInt(ofGetEnv("OFLED_FLIP"));
+	 cout << offset << endl;;
+	 cout << rot << endl;;
+	 cout << flip << endl;;
+
+	 // cout << ofGetEnv("OFLED_OFFSET") << endl;;
 	ofDisableAntiAliasing();
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
@@ -22,13 +31,15 @@ void ofApp::setup(){
 	teensy.setup(stripWidth, stripHeight, rowHeight, stripsPerPort, numPorts);
 
 	/* Configure our teensy boards (portName, xOffset, yOffset, width%, height%, direction) */
-	teensy.serialConfigure("ttyACM0", 0, 0, 100, 100, 0);
+	teensy.serialConfigure("ttyACM0", 0, 0, 100, 100, flip);
 	teensy.setBrightness(brightness);
 
 	// allocate our pixels, fbo, and texture
 	 fbo.allocate(stripWidth, stripHeight*stripsPerPort*numPorts, GL_RGB);
+	 fboHolder.allocate(stripWidth, rowHeight, GL_RGB);
 
-	 // cout << ofGetEnv('OFLED_OFFSET') << endl;;
+	 tFont.load("fonts/AverageMono.ttf", 14, false);
+
 }
 
 //--------------------------------------------------------------
@@ -41,26 +52,26 @@ void ofApp::update(){
 void ofApp::draw(){
 	fbo.begin();
 	ofClear(0,0,0);                             // refreshes fbo, removes artifacts
-	ofSetColor(255, 0, 255);
-	// ofDrawRectangle(ballpos,0,rectWidth,stripHeight*stripsPerPort*numPorts);
-	// ofDrawRectangle(0,0,1,stripHeight*stripsPerPort*numPorts);
+
 	ofBuffer buffer = ofBufferFromFile("display.log");
 	if(buffer.size()) {
 		auto end = buffer.getReverseLines().begin();
 		string line = *end;
 
-		ofRectangle r = font.getBoundingBox(line, 0, 0);
-		// float xPos = ofMap(sin(ofGetElapsedTimef()/4), -1, 1, 0, -r.getWidth()+16);
-		float m = ofToFloat(ofGetTimestampString("%M"));
+		float r = tFont.stringWidth(line);
 		float s = ofToFloat(ofGetTimestampString("%S")) * 1000;
 		float i = ofToFloat(ofGetTimestampString("%i"));
 		float time = s + i;
 		float max = 10000;
-		float xPos = ofMap(ofWrap(time, 0, max), 0, max, 0, -r.getWidth()+16);
+		float xPos = ofMap(ofWrap(time, 0, max), 0, max, 0, -r-16);
 
-		ofDrawBitmapString(line, xPos, 16);
-		// cout << s + i << endl;
-		ofColor(255);
+		ofPushMatrix();
+		ofTranslate(8, 8);
+		ofRotateZ(rot);
+		ofTranslate(-8, -8);
+		ofSetColor(0, 255, 0);
+		tFont.drawString(line, xPos+16+(16*offset), 13);
+		ofPopMatrix();
 	}
 
 	fbo.end();
